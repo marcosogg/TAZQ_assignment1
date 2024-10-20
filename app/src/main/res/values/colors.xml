@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary and Secondary Colors -->
+    <color name="primaryColor">#1E88E5</color> <!-- Blue -->
+    <color name="primaryColorVariant">#1565C0</color> <!-- Darker Blue -->
+    <color name="secondaryColor">#FF7043</color> <!-- Orange -->
+    <color name="secondaryColorVariant">#D84315</color> <!-- Darker Orange -->
+
+    <!-- Standard Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Custom Colors -->
+    <color name="red_200">#EF5350</color> <!-- Defined as per error -->
+    <color name="light_gray">#F5F5F5</color>
+    <color name="dark_gray">#424242</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="item_background_color">#FFFFFF</color> <!-- White background for items -->
 </resources>

@@ -1,3 +1,5 @@
+import com.google.gson.internal.`$Gson$Types`
+
 plugins {
     id("com.android.application") // Replace with the appropriate plugin id
     id("org.jetbrains.kotlin.android")
@@ -48,4 +50,5 @@ dependencies {
     // Add Lifecycle dependencies
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.livedata)
+    implementation("com.google.code.gson:gson:2.10.1")
 }
