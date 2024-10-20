@@ -14,7 +14,8 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG = "TaskViewModel"
 
-    private val _tasks = MutableLiveData<MutableList<TaskModel>>(mutableListOf())
+    // Initialize _tasks as non-nullable and with an empty list
+    private val _tasks = MutableLiveData<MutableList<TaskModel>>().apply { value = mutableListOf() }
     val tasks: LiveData<MutableList<TaskModel>> get() = _tasks
 
     private val gson = Gson()
@@ -28,44 +29,51 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
      * Adds a new task with a unique ID.
      */
     fun addTask(title: String) {
-        val currentList = _tasks.value
-        currentList?.let {
-            val newId = if (it.isEmpty()) 1 else it.maxOf { task -> task.id } + 1
-            val newTask = TaskModel(id = newId, title = title)
-            it.add(newTask)
-            _tasks.value = it
-            saveTasksToJson()
-            Log.d(TAG, "Added task: $newTask")
-        }
+        val currentList = _tasks.value ?: mutableListOf()
+        val newId = if (currentList.isEmpty()) 1 else currentList.maxOf { it.id } + 1
+        val newTask = TaskModel(id = newId, title = title)
+        currentList.add(newTask)
+        _tasks.value = currentList
+        saveTasksToJson()
+        Log.d(TAG, "Added task: $newTask")
     }
 
     /**
      * Adds a task at a specific position (used for Undo).
      */
     fun addTaskAt(task: TaskModel, position: Int) {
-        _tasks.value?.add(position, task)
-        _tasks.value = _tasks.value
-        saveTasksToJson()
-        Log.d(TAG, "Restored task: $task at position $position")
+        val currentList = _tasks.value ?: mutableListOf()
+        if (position >= 0 && position <= currentList.size) {
+            currentList.add(position, task)
+            _tasks.value = currentList
+            saveTasksToJson()
+            Log.d(TAG, "Restored task: $task at position $position")
+        } else {
+            Log.e(TAG, "Invalid position: $position for restoring task: $task")
+        }
     }
 
     /**
      * Deletes a specific task.
      */
     fun deleteTask(task: TaskModel) {
-        _tasks.value?.remove(task)
-        _tasks.value = _tasks.value
-        saveTasksToJson()
-        Log.d(TAG, "Deleted task: $task")
+        val currentList = _tasks.value ?: mutableListOf()
+        if (currentList.remove(task)) {
+            _tasks.value = currentList
+            saveTasksToJson()
+            Log.d(TAG, "Deleted task: $task")
+        } else {
+            Log.e(TAG, "Attempted to delete a task that doesn't exist: $task")
+        }
     }
 
     /**
      * Updates an existing task.
      */
     fun updateTask(updatedTask: TaskModel) {
-        val currentList = _tasks.value
-        val index = currentList?.indexOfFirst { it.id == updatedTask.id }
-        if (index != null && index != -1) {
+        val currentList = _tasks.value ?: mutableListOf()
+        val index = currentList.indexOfFirst { it.id == updatedTask.id }
+        if (index != -1) {
             currentList[index] = updatedTask
             _tasks.value = currentList
             saveTasksToJson()
