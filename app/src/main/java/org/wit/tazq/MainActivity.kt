@@ -84,15 +84,15 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 // Get the position of the swiped item
                 val position = viewHolder.adapterPosition
-                // Remove the task from the adapter and ViewModel
-                val removedTask = taskAdapter.removeTask(position)
+                // Get the task to be removed
+                val removedTask = taskAdapter.getTaskAt(position)
+                // Delete the task via ViewModel
                 taskViewModel.deleteTask(removedTask)
 
                 // Show Snackbar with Undo option
                 Snackbar.make(recyclerViewTasks, "Task deleted", Snackbar.LENGTH_LONG)
                     .setAction("UNDO") {
-                        // Restore the task in the adapter and ViewModel
-                        taskAdapter.restoreTask(removedTask, position)
+                        // Restore the task via ViewModel
                         taskViewModel.addTaskAt(removedTask, position)
                     }
                     .setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.primaryColor))

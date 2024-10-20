@@ -40,27 +40,17 @@ class TaskAdapter(
     override fun getItemCount(): Int = tasks.size
 
     /**
-     * Removes a task at the specified position.
-     */
-    fun removeTask(position: Int): TaskModel {
-        val removedTask = tasks.removeAt(position)
-        notifyItemRemoved(position)
-        return removedTask
-    }
-
-    /**
-     * Restores a task at the specified position.
-     */
-    fun restoreTask(task: TaskModel, position: Int) {
-        tasks.add(position, task)
-        notifyItemInserted(position)
-    }
-
-    /**
      * Updates the entire task list.
      */
     fun updateTasks(newTasks: MutableList<TaskModel>) {
         tasks = newTasks
         notifyDataSetChanged()
+    }
+
+    /**
+     * Retrieves the task at the specified position.
+     */
+    fun getTaskAt(position: Int): TaskModel {
+        return tasks[position]
     }
 }
