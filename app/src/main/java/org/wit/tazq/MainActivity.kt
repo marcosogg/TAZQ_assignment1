@@ -1,6 +1,7 @@
 // MainActivity.kt
 package org.wit.tazq
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +15,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView // Import if implementing search
+import androidx.appcompat.widget.Toolbar // Import if using custom Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber // Import Timber if using
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +44,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // Set the content view to activity_main.xml
         setContentView(R.layout.activity_main)
+
+        // Initialize Toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "TAZQ Tasks"
 
         // Initialize views by finding them by their IDs
         recyclerViewTasks = findViewById(R.id.recyclerViewTasks)
@@ -120,7 +129,7 @@ class MainActivity : AppCompatActivity() {
         val dialogView = inflater.inflate(R.layout.dialog_add_task, null)
         builder.setView(dialogView)
 
-        // Find the TextInputEditText within the dialog
+        // Find the EditText within the dialog
         val editTextTaskTitle: EditText = dialogView.findViewById(R.id.editTextTaskTitle)
 
         // Set up the "Add" button
@@ -135,7 +144,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // If the input is empty, set an error on the EditText
                 editTextTaskTitle.error = "Task title cannot be empty"
-                Log.e(TAG, "Attempted to add a task with an empty title")
+                Timber.e("Attempted to add a task with an empty title")
             }
         }
 
@@ -182,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         val dialogView = inflater.inflate(R.layout.dialog_add_task, null)
         builder.setView(dialogView)
 
-        // Find the TextInputEditText within the dialog and set the current task title
+        // Find the EditText within the dialog and set the current task title
         val editTextTaskTitle: EditText = dialogView.findViewById(R.id.editTextTaskTitle)
         editTextTaskTitle.setText(task.title)
 
@@ -200,7 +209,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // If the input is empty, set an error on the EditText
                 editTextTaskTitle.error = "Task title cannot be empty"
-                Log.e(TAG, "Attempted to update a task with an empty title")
+                Timber.e("Attempted to update a task with an empty title")
             }
         }
 
@@ -234,7 +243,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Inflates the menu resource into the menu.
+     * Inflate the menu resource into the menu.
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -246,13 +255,61 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_view_list -> {
+                // Scroll RecyclerView to top
+                recyclerViewTasks.scrollToPosition(0)
+                Snackbar.make(recyclerViewTasks, "Task List selected", Snackbar.LENGTH_SHORT).show()
+                true
+            }
+            R.id.action_view_map -> {
+                // Navigate to Map View Activity (to be implemented)
+                openMapView()
+                true
+            }
             R.id.action_settings -> {
-                // Handle the Settings action (to be implemented)
-                Snackbar.make(recyclerViewTasks, "Settings clicked", Snackbar.LENGTH_SHORT).show()
-                Log.d(TAG, "Settings menu item clicked")
+                // Open Settings Activity
+                openSettings()
+                true
+            }
+            R.id.action_about -> {
+                // Open About Activity
+                openAbout()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Navigates to the Map View Activity.
+     */
+    private fun openMapView() {
+        // Implement navigation to MapViewActivity
+        // Example:
+        /*
+        val intent = Intent(this, MapViewActivity::class.java)
+        startActivity(intent)
+        */
+        // For now, show a Snackbar
+        Snackbar.make(recyclerViewTasks, "Map View selected", Snackbar.LENGTH_SHORT).show()
+        Log.d(TAG, "Map View selected from menu")
+    }
+
+    /**
+     * Opens the Settings Activity.
+     */
+    private fun openSettings() {
+        // Intent to navigate to SettingsActivity (to be created)
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+    /**
+     * Opens the About Activity.
+     */
+    private fun openAbout() {
+        // Intent to navigate to AboutActivity (to be created)
+        val intent = Intent(this, AboutActivity::class.java)
+        startActivity(intent)
     }
 }

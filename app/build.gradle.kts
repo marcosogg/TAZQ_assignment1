@@ -1,5 +1,3 @@
-import com.google.gson.internal.`$Gson$Types`
-
 plugins {
     id("com.android.application") // Replace with the appropriate plugin id
     id("org.jetbrains.kotlin.android")
@@ -17,6 +15,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -52,5 +54,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata)
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
 }
