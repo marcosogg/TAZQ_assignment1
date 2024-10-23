@@ -23,4 +23,10 @@
 
         <!-- Other theme attributes can remain unchanged or be customized as needed -->
     </style>
+
+    <!-- No Action Bar Theme for SplashActivity -->
+    <style name="Theme.TAZQ.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
